@@ -1,0 +1,53 @@
+body {
+  font-family: sans-serif;
+  background: #eef2f3;
+  margin: 0;
+  padding: 2rem;
+}
+
+.container {
+  text-align: center;
+}
+
+input {
+  padding: 0.6rem;
+  margin: 1rem;
+  width: 240px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  background: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}
+
+.forecast-row {
+  display: flex;
+  overflow-x: auto;
+  padding: 1rem 0;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 0 0.5rem;
+  min-width: 120px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}

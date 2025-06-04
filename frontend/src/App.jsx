@@ -1,5 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import {
+  fetchWeatherEntries,
+  createWeatherEntry,
+  deleteWeatherEntry,
+  updateWeatherEntry
+} from './api/weatherAPI';
 import './index.css';
 
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
@@ -10,6 +16,22 @@ function App() {
   const [forecast, setForecast] = useState([]);
   const [hourly, setHourly] = useState([]);
   const [error, setError] = useState('');
+  const [entries, setEntries] = useState([]);
+  const [editEntry, setEditEntry] = useState(null);
+  const [editForm, setEditForm] = useState({
+    temperature: '',
+    humidity: '',
+    description: ''
+  });
+
+  const loadSavedWeather = async () => {
+    try {
+      const res = await fetchWeatherEntries();
+      setEntries(res.data);
+    } catch (err) {
+      console.error("Failed to load saved weather:", err);
+    }
+  };
 
   const fetchWeather = async () => {
     try {
@@ -22,6 +44,23 @@ function App() {
       setForecast(data.forecast.forecastday);
       setHourly(data.forecast.forecastday[0].hour);
       setError('');
+
+      try {
+        await createWeatherEntry({
+          location: data.location.name,
+          dateRange: {
+            start: data.forecast.forecastday[0].date,
+            end: data.forecast.forecastday[data.forecast.forecastday.length - 1].date
+          },
+          temperature: `${data.current.temp_c}°C`,
+          humidity: `${data.current.humidity}%`,
+          description: data.current.condition.text
+        });
+        loadSavedWeather();
+      } catch (backendErr) {
+        console.warn("⚠️ Weather shown, but saving to backend failed.");
+      }
+
     } catch (err) {
       console.error(err);
       setError('⚠️ Unable to fetch weather. Please check the input.');
@@ -50,6 +89,23 @@ function App() {
         setForecast(data.forecast.forecastday);
         setHourly(data.forecast.forecastday[0].hour);
         setError('');
+
+        try {
+          await createWeatherEntry({
+            location: data.location.name,
+            dateRange: {
+              start: data.forecast.forecastday[0].date,
+              end: data.forecast.forecastday[data.forecast.forecastday.length - 1].date
+            },
+            temperature: `${data.current.temp_c}°C`,
+            humidity: `${data.current.humidity}%`,
+            description: data.current.condition.text
+          });
+          loadSavedWeather();
+        } catch (backendErr) {
+          console.warn("⚠️ Weather shown, but saving to backend failed.");
+        }
+
       } catch (err) {
         console.error(err);
         setError('⚠️ Could not get weather for your location.');
@@ -58,6 +114,36 @@ function App() {
       setError("⚠️ Permission denied or unable to retrieve your location.");
     });
   };
+
+  const handleDelete = async (id) => {
+    await deleteWeatherEntry(id);
+    loadSavedWeather();
+  };
+
+  const startEditing = (entry) => {
+    setEditEntry(entry._id);
+    setEditForm({
+      temperature: entry.temperature || '',
+      humidity: entry.humidity || '',
+      description: entry.description || ''
+    });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditSubmit = async (id) => {
+    await updateWeatherEntry(id, editForm);
+    setEditEntry(null);
+    setEditForm({ temperature: '', humidity: '', description: '' });
+    loadSavedWeather();
+  };
+
+  useEffect(() => {
+    loadSavedWeather();
+  }, []);
 
   return (
     <div className="container">
@@ -112,6 +198,32 @@ function App() {
           </div>
         </>
       )}
+
+      <div style={{ marginTop: '2rem' }}>
+        <h2>📦 Saved Weather Entries</h2>
+        <ul>
+          {entries.map((entry) => (
+            <li key={entry._id}>
+              📍 {entry.location} |{' '}
+              {editEntry === entry._id ? (
+                <>
+                  <input name="temperature" value={editForm.temperature} onChange={handleEditChange} placeholder="Temperature" />
+                  <input name="humidity" value={editForm.humidity} onChange={handleEditChange} placeholder="Humidity" />
+                  <input name="description" value={editForm.description} onChange={handleEditChange} placeholder="Description" />
+                  <button onClick={() => handleEditSubmit(entry._id)}>✅ Save</button>
+                  <button onClick={() => setEditEntry(null)}>❌ Cancel</button>
+                </>
+              ) : (
+                <>
+                  {entry.temperature} | {entry.humidity} | {entry.description}
+                  <button onClick={() => startEditing(entry)} style={{ marginLeft: '1rem' }}>✏️ Edit</button>
+                  <button onClick={() => handleDelete(entry._id)} style={{ marginLeft: '0.5rem' }}>🗑️ Delete</button>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

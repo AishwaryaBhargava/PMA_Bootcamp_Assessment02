@@ -1,12 +1,108 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🌤️ Weather Forecast App (Assessment 2)
 
-Currently, two official plugins are available:
+A full-stack weather forecast application built with **React**, **Express**, and **MongoDB**. This project allows users to search for weather information using city names, ZIP codes, GPS coordinates, or landmarks, view current and forecasted weather, and save entries for later viewing or editing.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Live Demo
+- **Frontend:** [https://pma-bootcamp-assessment02.vercel.app](https://pma-bootcamp-assessment02.vercel.app)
+- **Backend:** [https://weather-app-backend-1huv.onrender.com/api/weather](https://weather-app-backend-1huv.onrender.com/api/weather)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React (Vite + SWC)
+- Axios
+- CSS (responsive styling)
+
+### Backend
+- Node.js + Express
+- MongoDB Atlas + Mongoose
+- CORS + dotenv
+
+---
+
+## ✨ Features
+- Search weather by city, ZIP, landmark, or GPS coordinates
+- Use browser geolocation to fetch local weather
+- View current, hourly, and 5-day forecast
+- Save weather entries to MongoDB
+- View, edit, and delete saved entries
+
+---
+
+## 🗂️ Folder Structure
+```
+weather-app-02
+├── backend
+│   ├── controllers
+│   ├── models
+│   ├── routes
+│   ├── server.js
+│   └── .env
+├── frontend
+│   ├── public
+│   ├── src
+│   │   ├── api
+│   │   ├── App.jsx
+│   │   └── weatherAPI.js
+│   └── .env
+└── README.md
+```
+
+---
+
+## 🌍 Deployment Instructions
+
+### Backend (Render)
+1. Create a Render account: https://render.com/
+2. Create a new Web Service
+   - Connect your GitHub repo
+   - Set root as `/backend`
+   - Use `server.js` as the entry point
+3. Add Environment Variables:
+   - `PORT = 5000`
+   - `MONGO_URI = <your-mongodb-uri>`
+4. Set build command: `npm install`
+5. Set start command: `node server.js`
+6. Deploy the backend and note the service URL (e.g. `https://weather-app-backend-xxxx.onrender.com`)
+
+### Frontend (Vercel)
+1. Create a Vercel account: https://vercel.com/
+2. Import your GitHub repository
+3. Configure the frontend root directory: `/frontend`
+4. Add environment variables:
+   - `VITE_BACKEND_BASE_URL = https://weather-app-backend-xxxx.onrender.com/api/weather`
+   - `VITE_WEATHER_API_KEY = <your-weatherapi-key>`
+5. Set build command: `npm run build`
+6. Set output directory: `dist`
+7. Deploy and verify live site
+
+---
+
+## 🔒 Environment Variables
+
+### Backend `.env`
+```
+PORT=5000
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/weatherDB?retryWrites=true&w=majority
+```
+
+### Frontend `.env`
+```
+VITE_BACKEND_BASE_URL=https://weather-app-backend-xxxx.onrender.com/api/weather
+VITE_WEATHER_API_KEY=<your-api-key>
+```
+
+---
+
+## 👩🏻‍💻 Developed by
+**Aishwarya Bhargava**  
+Assessment submission for PM Accelerator Bootcamp – Software Engineer Intern (AI/ML Application)
+
+---
+
+Thank you for reviewing this project! 🌟

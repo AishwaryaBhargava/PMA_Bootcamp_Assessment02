@@ -23,6 +23,8 @@ function App() {
     humidity: '',
     description: ''
   });
+  const [showAboutMe, setShowAboutMe] = useState(false);
+  const [showAboutPM, setShowAboutPM] = useState(false);
 
   const loadSavedWeather = async () => {
     try {
@@ -57,10 +59,9 @@ function App() {
           description: data.current.condition.text
         });
         loadSavedWeather();
-      } catch (backendErr) {
+      } catch {
         console.warn("⚠️ Weather shown, but saving to backend failed.");
       }
-
     } catch (err) {
       console.error(err);
       setError('⚠️ Unable to fetch weather. Please check the input.');
@@ -102,10 +103,9 @@ function App() {
             description: data.current.condition.text
           });
           loadSavedWeather();
-        } catch (backendErr) {
+        } catch {
           console.warn("⚠️ Weather shown, but saving to backend failed.");
         }
-
       } catch (err) {
         console.error(err);
         setError('⚠️ Could not get weather for your location.');
@@ -148,6 +148,11 @@ function App() {
   return (
     <div className="container">
       <h1>🌤️ Weather Forecast App</h1>
+      <div style={{ marginBottom: '1rem' }}>
+        <button onClick={() => setShowAboutMe(true)}>👩 About Me</button>
+        <button onClick={() => setShowAboutPM(true)} style={{ marginLeft: '1rem' }}>🏢 About PM Accelerator</button>
+      </div>
+
       <input
         type="text"
         placeholder="🔍 Enter city, ZIP, landmark, or GPS (lat,lon)"
@@ -158,6 +163,7 @@ function App() {
         <button onClick={fetchWeather}>🔎 Get Weather</button>
         <button onClick={getMyLocationWeather} style={{ marginLeft: '1rem' }}>📍 Use My Location</button>
       </div>
+
       {error && <p className="error">{error}</p>}
 
       {current && (
@@ -224,6 +230,39 @@ function App() {
           ))}
         </ul>
       </div>
+
+      {/* About Me Modal */}
+      {showAboutMe && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>👩 About Me</h2>
+            <p>Hi! I'm Aishwarya Bhargava, a passionate developer and AI/ML enthusiast. This project is part of my Assessment 2 for the PM Accelerator Bootcamp.</p>
+            <div className="button-group">
+              <a href="https://www.linkedin.com/in/aishwarya-bhargava05/" target="_blank">LinkedIn</a>
+              <a href="https://aishwaryabhargava.github.io/portfolio" target="_blank">Portfolio</a>
+              <a href="https://github.com/AishwaryaBhargava" target="_blank">GitHub</a>
+              <a href="https://drive.google.com/file/d/1avUlVvvZ8sL2paWo039QmMamMaf2c5th/view?usp=drive_link" target="_blank">Resume</a>
+            </div>
+            <button onClick={() => setShowAboutMe(false)}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {/* About PM Accelerator Modal */}
+      {showAboutPM && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>🏢 About PM Accelerator</h2>
+            <p>The PM Accelerator Bootcamp trains future engineers in practical AI/ML development through industry-relevant projects. Learn more about the internship and offerings at PMA.</p>
+            <div className="button-group">
+              <a href="https://www.linkedin.com/company/pmaccelerator" target="_blank">LinkedIn</a>
+              <a href="https://www.pmaccelerator.io/AI-ML-Software-Engineer-Intern" target="_blank">Internship Page</a>
+              <a href="https://www.pmaccelerator.io/" target="_blank">Official Website</a>
+            </div>
+            <button onClick={() => setShowAboutPM(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

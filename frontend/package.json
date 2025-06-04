@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://AishwaryaBhargava.github.io/PMA_Bootcamp_Assessment01",
+  "homepage": "https://AishwaryaBhargava.github.io/PMA_Bootcamp_Assessment02",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
